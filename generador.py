@@ -1,11 +1,13 @@
 import random
 
-print("*******GENERADOR DE CONTRASEÑAS***********")
 
-minuscula = int(input("Indique número mínimo de minusculas: "))
-mayuscula = int(input("Indique número mínimo de mayusculas: "))
-numerico = int(input("Indique número mínimo de caracteres númericos: "))
-longitud = int(input("Indique longitud de la contraseña: "))
+def numAleatorio():
+    return random.randint(0, len(abecedario) - 1)
+
+
+def letra():
+    return abecedario[numAleatorio()]
+
 
 abecedario = [
     "a",
@@ -38,52 +40,66 @@ abecedario = [
 
 contraseña = []
 sumatoria = 0
+inicio = True
 
 
-def numAleatorio():
-    return random.randint(0, len(abecedario) - 1)
+while inicio:
+    print("App Generador de Contraseña\n".center(100))
 
+    opcion = int(
+        input(f"Digite la opcion...\n" f"1. Generar conreaseña.\n" f"2. Salir.\n" f"=>")
+    )
 
-def letra():
-    return abecedario[numAleatorio()]
+    if opcion == 1:
+        minuscula = int(input("Indique número mínimo de minusculas: \n=>"))
+        mayuscula = int(input("Indique número mínimo de mayusculas: \n=>"))
+        numerico = int(input("Indique número mínimo de caracteres númericos: \n=>"))
+        longitud = int(input("Indique longitud de la contraseña: \n=>"))
 
+        total = minuscula + mayuscula + numerico
+        if total <= longitud:
+            if sumatoria <= longitud:
+                while minuscula > 0:
+                    if sumatoria == longitud:
+                        break
 
-while sumatoria <= longitud:
-    while minuscula > 0:
-        if sumatoria == longitud:
-            break
+                    contraseña.append(letra())
+                    minuscula -= 1
+                    sumatoria += 1
 
-        contraseña.append(letra())
-        minuscula -= 1
-        sumatoria += 1
+                while mayuscula > 0:
+                    if sumatoria == longitud:
+                        break
 
-    while mayuscula > 0:
-        if sumatoria == longitud:
-            break
+                    contraseña.append(letra().upper())
+                    mayuscula -= 1
+                    sumatoria += 1
 
-        contraseña.append(letra().upper())
-        mayuscula -= 1
-        sumatoria += 1
+                while numerico > 0:
+                    if sumatoria == longitud:
+                        break
 
-    while numerico > 0:
-        if sumatoria == longitud:
-            break
+                    contraseña.append(str(random.randint(1, 9)))
+                    numerico -= 1
+                    sumatoria += 1
 
-        contraseña.append(str(random.randint(1, 9)))
-        numerico -= 1
-        sumatoria += 1
+            if sumatoria != longitud:
+                minuscula, mayuscula, numerico = 1, 1, 1
 
-    if sumatoria != longitud:
-        minuscula, mayuscula, numerico = 1, 1, 1
+            if sumatoria == longitud:
+                break
 
-    if sumatoria == longitud:
-        break
+            # Con random.shuffle desordeno el array
+            random.shuffle(contraseña)
 
-# Con random.shuffle desordeno el array
-random.shuffle(contraseña)
+            # Con "".join(contraseña) extraigo los elemntos del array y creo una cadena
+            clave = "".join(contraseña)
 
-# Con "".join(contraseña) extraigo los elemntos del array y creo una cadena
-clave = "".join(contraseña)
-
-print(clave)
-print(f"SU CONTRASEÑA ES: {contraseña}")
+            print(f"SU CONTRASEÑA ES: {clave}")
+        else:
+            print("los datos de la contraseña son mayores que la longitud")
+    elif opcion == 2:
+        print(f"Saliendo de la App ...")
+        inicio = False
+    else:
+        print("Opcion Invalida")
